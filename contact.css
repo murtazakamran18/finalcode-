@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .bbe {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: fadeIn 0.8s forwards; /* Increased duration for smoothness */
+    animation-delay: 0.2s; /* Added delay before animation starts */
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  input:focus,
+  textarea:focus {
+    border-color: #695aa6;
+    box-shadow: 0 0 5px rgba(105, 90, 166, 0.5);
+    outline: none;
+  }
+  
+  .btn-submit, .btn-back {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .btn-submit {
+    background-color: #695aa6;
+  }
+  
+  .btn-submit:hover {
+    background-color: #5b4f8a;
+    transform: translateY(-2px);
+  }
+  
+  .btn-back {
+    background-color: #333;
+  }
+  
+  .btn-back:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+  }
+  
+  @keyframes fadeIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+  }/* General styling for the thank-you page */
+  
