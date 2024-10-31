@@ -13,15 +13,10 @@
 */
 
 // smooth scroll
-window.addEventListener("load", function() {
-    setTimeout(function() {
-        const loader = document.getElementById("loader");
-        loader.style.display = "none"; // Hide loader after delay
-    }, 2000); // 2-second delay after the page loads
-});
 
-$(document).ready(function(){
-    $(".navbar .nav-link").on('click', function(event) {
+
+$(document).ready(function () {
+    $(".navbar .nav-link").on('click', function (event) {
 
         if (this.hash !== "") {
 
@@ -31,58 +26,59 @@ $(document).ready(function(){
 
             $('html, body').animate({
                 scrollTop: $(hash).offset().top
-            }, 700, function(){
+            }, 700, function () {
                 window.location.hash = hash;
             });
-        } 
+        }
     });
 });
 
 // navbar toggle
-$('#nav-toggle').click(function(){
+$('#nav-toggle').click(function () {
     $(this).toggleClass('is-active')
     $('ul.nav').toggleClass('show');
 });
-function speakText() {
-    // Pehle se koi speech chal rahi hai toh usay cancel karna
-    window.speechSynthesis.cancel();
+let utterance;
 
-    // About me text ko variable mein save karna
-    const aboutText = document.getElementById("aboutText").innerText;
+function startSpeech() {
+    const textElement = document.getElementById("aboutText");
+    if (textElement) {
+        const text = textElement.innerText;
+        utterance = new SpeechSynthesisUtterance(text);
 
-    // SpeechSynthesis API ka istamal
-    const utterance = new SpeechSynthesisUtterance(aboutText);
-    utterance.lang = 'en-US'; // Language set karna, yahaan English set kiya gaya hai
-    utterance.rate = 1; // Speech ki speed set karna
+        utterance.onend = () => {
+            document.getElementById("pauseButton").style.display = "none";
+            document.getElementById("resumeButton").style.display = "none";
+            document.getElementById("speakButton").style.display = "inline-block";
+        };
 
-    // Jab speech khatam ho toh cancel kar dena taake dobara start na ho
-    utterance.onend = () => {
-        window.speechSynthesis.cancel();
-    };
+        // Start speaking
+        speechSynthesis.speak(utterance);
 
-    // Speech start karna
-    window.speechSynthesis.speak(utterance);
-}
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = currentTheme === "dark" ? "light" : "dark"; // Toggle between dark and light
-
-    // Set new theme
-    document.documentElement.setAttribute("data-theme", newTheme);
-
-    // Save theme in localStorage
-    localStorage.setItem("theme", newTheme);
-
-    // Change button icon
-    document.querySelector(".theme-toggle-btn").textContent = newTheme === "dark" ? "🌙" : "🌞"; // Update icon based on theme
+        document.getElementById("speakButton").style.display = "none";
+        document.getElementById("pauseButton").style.display = "inline-block";
+    } else {
+        console.error("Text element not found");
+    }
 }
 
-// Apply saved theme on page load
-window.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme") || "light"; // Default to light if no saved theme
-    document.documentElement.setAttribute("data-theme", savedTheme);
-    document.querySelector(".theme-toggle-btn").textContent = savedTheme === "dark" ? "🌙" : "🌞"; // Update icon based on saved theme
-});
+function pauseSpeech() {
+    if (speechSynthesis.speaking && !speechSynthesis.paused) {
+        speechSynthesis.pause();
+        document.getElementById("pauseButton").style.display = "none";
+        document.getElementById("resumeButton").style.display = "inline-block";
+    }
+}
+
+function resumeSpeech() {
+    if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+        document.getElementById("resumeButton").style.display = "none";
+        document.getElementById("pauseButton").style.display = "inline-block";
+    }
+}
+
+
 const progressBars = document.querySelectorAll(".progress-bar");
 
 // Define skill levels as an array of objects
@@ -112,7 +108,7 @@ function animateProgressBars() {
             skill.element.appendChild(percentageDisplay); // Add percentage to progress bar
 
             // Fade in percentage
-            setTimeout(() => { percentageDisplay.style.opacity = 1; }, 100); 
+            setTimeout(() => { percentageDisplay.style.opacity = 1; }, 100);
         }, index * 500); // Stagger the animations
     });
 }
@@ -136,3 +132,181 @@ window.addEventListener('scroll', () => {
     }
 });
 
+let isFirstInteraction = true;
+
+function toggleChatbot() {
+    const chatbotWindow = document.getElementById("chatbotWindow");
+    chatbotWindow.style.display = chatbotWindow.style.display === "none" ? "block" : "none";
+
+    if (chatbotWindow.style.display === "block" && isFirstInteraction) {
+        sendBotMessage("Hi! I'm your virtual guide. You can ask me any web development questions like:");
+        sendBotMessage("1. What is HTML?");
+        sendBotMessage("2. What is CSS?");
+        sendBotMessage("3. What is JavaScript?");
+        sendBotMessage("4. What is PHP?");
+        sendBotMessage("5. What is Responsive Design?");
+        sendBotMessage("Feel free to click on any question above or type your own!");
+        isFirstInteraction = false;
+    }
+}
+
+function sendBotMessage(message) {
+    const messagesDiv = document.getElementById("chatbotMessages");
+    const botMessage = document.createElement("div");
+    botMessage.style.color = "#333";
+    botMessage.style.margin = "5px 0";
+    botMessage.textContent = "Guide: " + message;
+    messagesDiv.appendChild(botMessage);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function sendMessage() {
+    const input = document.getElementById("chatbotInput");
+    const userMessage = input.value.trim();
+    if (userMessage) {
+        addUserMessage(userMessage);
+        processUserMessage(userMessage.toLowerCase());
+        input.value = "";
+    }
+}
+
+function addUserMessage(message) {
+    const messagesDiv = document.getElementById("chatbotMessages");
+    const userMessage = document.createElement("div");
+    userMessage.style.color = "#007bff";
+    userMessage.style.margin = "5px 0";
+    userMessage.textContent = "You: " + message;
+    messagesDiv.appendChild(userMessage);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function processUserMessage(message) {
+    switch (message) {
+        case 'name':
+        case 'what is your name':
+        case 'what is your name?':
+        case 'what is name':
+            sendBotMessage("I'm Murtaza Kamran, a passionate and dedicated web developer.");
+            break;
+        case 'html':
+        case '1':
+        case 'what is html?':
+        case 'what is html':
+            sendBotMessage("HTML stands for HyperText Markup Language. It is the standard markup language for creating web pages.");
+            break;
+        case 'css':
+        case '2':
+        case 'what is css?':
+        case 'what is css':
+            sendBotMessage("CSS stands for Cascading Style Sheets. It is used for describing the presentation of a document written in HTML.");
+            break;
+        case 'javascript':
+        case '3':
+        case 'what is javascript?':
+        case 'what is javascript':
+            sendBotMessage("JavaScript is a programming language that enables you to create dynamic content on your web pages.");
+            break;
+        case 'php':
+        case '4':
+        case 'what is php?':
+        case 'what is php':
+            sendBotMessage("PHP stands for Hypertext Preprocessor. It is a server-side scripting language designed for web development.");
+            break;
+        case 'responsive design':
+        case '5':
+        case 'what is responsive design?':
+        case 'what is responsive design':
+            sendBotMessage("Responsive design is an approach to web design that makes web pages render well on a variety of devices.");
+            break;
+        default:
+            sendBotMessage("I'm here to help you with web development questions. Try asking about HTML, CSS, JavaScript, or PHP!");
+            break;
+    }
+}
+
+// Smooth scroll function
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+const textToType = document.getElementById('textToType').innerText;
+const userInput = document.getElementById('userInput');
+const resultDisplay = document.getElementById('result');
+const startButton = document.getElementById('startButton');
+
+let startTime, endTime;
+
+startButton.addEventListener('click', startTest);
+
+function startTest() {
+    userInput.value = '';
+    userInput.disabled = false;
+    resultDisplay.innerText = '';
+    startTime = new Date().getTime();
+    userInput.focus();
+    userInput.addEventListener('input', checkInput);
+}
+
+function checkInput() {
+    const typedText = userInput.value;
+
+    if (typedText === textToType) {
+        endTime = new Date().getTime();
+        const timeTaken = (endTime - startTime) / 1000; // seconds
+        const speed = (textToType.split(' ').length / timeTaken) * 60; // words per minute
+        resultDisplay.innerText = `Congratulations! You completed the test in ${timeTaken} seconds. Your typing speed is ${speed.toFixed(2)} WPM.`;
+        userInput.disabled = true;
+        userInput.removeEventListener('input', checkInput);
+    } else if (textToType.startsWith(typedText)) {
+        // Allow user to continue typing if the input is correct so far
+        resultDisplay.innerText = 'Keep typing...';
+    } else {
+        // Show error if the input is wrong
+        resultDisplay.innerText = 'Incorrect! Please try again.';
+    }
+}
+
+// Get references to the textarea elements and output iframe
+const htmlCode = document.getElementById('htmlCode');
+const cssCode = document.getElementById('cssCode');
+const jsCode = document.getElementById('jsCode');
+const outputFrame = document.getElementById('outputFrame');
+
+// Function to update the output iframe
+function updateOutput() {
+    // Access the contentDocument of the iframe
+    const frameDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
+    // Open the document to write new content
+    frameDocument.open();
+    frameDocument.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>${cssCode.value}</style>
+        </head>
+        <body>
+            ${htmlCode.value}
+            <script>${jsCode.value}</script>
+        </body>
+        </html>
+    `);
+    // Close the document
+    frameDocument.close();
+}
+
+// Event listeners to update output on input change
+htmlCode.addEventListener('input', updateOutput);
+cssCode.addEventListener('input', updateOutput);
+jsCode.addEventListener('input', updateOutput);
+
+// Initialize the output on page load
+updateOutput();
+// Disable copy action on specific element
+document.getElementById('textToType').addEventListener('copy', (e) => {
+    e.preventDefault(); // Prevent copying
+    alert("Sorry! This text cannot be copied.");
+});
