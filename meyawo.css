@@ -71,7 +71,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #fff;
+  background-color:white;
   overflow-x: hidden;
 }
 
@@ -12305,7 +12305,7 @@ body {
 /* Light Creamy Theme (Dark Mode) */
 [data-theme="dark"] {
   --background-color: whitesmoke; /* Light creamy background color */
-  --text-color: white; /* Text color for light creamy background */
+  --text-color: black; /* Text color for light creamy background */
 }
 
 /* Applying Theme Colors */
@@ -12383,3 +12383,142 @@ body {
   transition: opacity 0.5s; /* Fade effect */
 }
 
+#chatbotButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+#chatbotWindow {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  width: 300px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+#chatbotHeader {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#chatbotMessages {
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#chatbotInput {
+  width: 100%;
+  border: none;
+  padding: 8px;
+  border-top: 1px solid #ddd;
+  outline: none;
+}
+@media (max-width: 400px) {
+  #chatbotWindow {
+      width: 90%; /* Wider for mobile */
+  }
+}
+.tic {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #695aa6;
+}
+
+#textToType {
+  font-size: 1.2em;
+  margin: 20px 0;
+  user-select: none;
+}
+
+textarea {
+  font-size: 1em;
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #695aa6;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 1em;
+  background-color: #695aa6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5b4b8a; /* Darker shade on hover */
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: green;
+}
+
+.mic {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: white;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #695aa6;
+}
+
+.editor-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.editor-container > div {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.CodeMirror {
+  height: auto;
+  border: 2px solid #695aa6;
+  border-radius: 5px;
+}
+
+iframe {
+  width: 100%;
+  height: 300px;
+  border: 2px solid #695aa6;
+  border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .editor-container {
+      flex-direction: column;
+  }
+  .editor-container > div {
+      margin: 10px 0;
+  }
+}
